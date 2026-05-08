@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Placement Prep">
+<meta name="theme-color" content="#0a0f0d">
+<title>Placement Prep · 40 LPA</title>
+<style>
+:root{
+  --bg:#0a0f0d;--bg2:#111a16;--bg3:#182420;--card:#1a2620;
+  --accent:#1D9E75;--accent2:#0f6e56;--accent-light:#5DCAA5;
+  --text:#f0ede8;--text2:#9aada7;--text3:#5c7068;
+  --border:rgba(29,158,117,0.15);--border2:rgba(29,158,117,0.3);
+  --amber:#EF9F27;--amber-bg:rgba(239,159,39,0.12);
+  --blue:#378ADD;--blue-bg:rgba(55,138,221,0.1);
+  --purple:#7F77DD;--purple-bg:rgba(127,119,221,0.1);
+  --red-bg:rgba(226,75,74,0.12);--red:#E24B4A;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+
+/* HEADER */
+#header{background:var(--bg);padding:16px 20px 12px;border-bottom:0.5px solid var(--border);flex-shrink:0;padding-top:calc(16px + var(--safe-top))}
+#header-top{display:flex;justify-content:space-between;align-items:center}
+#app-title{font-size:13px;font-weight:600;letter-spacing:0.08em;color:var(--accent-light);text-transform:uppercase}
+#streak-badge{display:flex;align-items:center;gap:5px;background:var(--amber-bg);border:0.5px solid rgba(239,159,39,0.3);border-radius:20px;padding:4px 10px}
+#streak-num{font-size:13px;font-weight:600;color:var(--amber)}
+#header-sub{margin-top:5px;font-size:12px;color:var(--text3)}
+
+/* CONTENT & NAV */
+#content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#content::-webkit-scrollbar{display:none}
+#bottom-nav{flex-shrink:0;background:var(--bg2);border-top:0.5px solid var(--border);display:flex;padding-bottom:var(--safe-bottom)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;border:none;background:transparent;cursor:pointer;color:var(--text3);transition:color 0.15s}
+.nav-btn.active{color:var(--accent-light)}
+.nav-icon{font-size:18px;line-height:1}
+.nav-label{font-size:10px;font-weight:500}
+
+/* PAGES */
+.page{display:none;padding:16px;padding-bottom:28px}
+.page.active{display:block}
+.card{background:var(--card);border:0.5px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.card-title{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px}
+.sec-head{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin:16px 0 10px}
+
+/* TODAY */
+.day-banner{background:var(--bg3);border:0.5px solid var(--border2);border-radius:16px;padding:16px;margin-bottom:12px}
+.day-date{font-size:12px;color:var(--text3);margin-bottom:2px}
+.day-title{font-size:21px;font-weight:700;color:var(--text);margin-bottom:10px}
+.prog-wrap{background:rgba(255,255,255,0.06);border-radius:20px;height:5px;margin-bottom:6px;overflow:hidden}
+.prog-fill{height:5px;border-radius:20px;background:var(--accent);transition:width 0.4s cubic-bezier(.34,1.56,.64,1)}
+.prog-label{font-size:12px;color:var(--text3)}
+.prog-label span{color:var(--accent-light);font-weight:600}
+.task-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:0.5px solid var(--border);cursor:pointer;user-select:none;-webkit-user-select:none}
+.task-item:last-child{border-bottom:none;padding-bottom:0}
+.task-item:active{opacity:0.65}
+.task-cb{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.task-cb.done{background:var(--accent);border-color:var(--accent)}
+.task-cb.done::after{content:'';display:block;width:6px;height:10px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) translate(-1px,-1px)}
+.task-body{flex:1}
+.task-name{font-size:14px;font-weight:500;color:var(--text);line-height:1.3;transition:color 0.2s}
+.task-name.done{color:var(--text3);text-decoration:line-through}
+.task-sub{font-size:12px;color:var(--text3);margin-top:2px;line-height:1.4}
+.task-time{font-size:11px;color:var(--accent2);font-weight:500;margin-top:3px}
+.tip-card{background:var(--amber-bg);border:0.5px solid rgba(239,159,39,0.25);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.tip-txt{font-size:13px;color:var(--amber);line-height:1.5}
+
+/* TIMETABLE */
+.day-tabs{display:flex;gap:4px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.day-tabs::-webkit-scrollbar{display:none}
+.day-tab{flex-shrink:0;padding:6px 13px;border-radius:20px;border:0.5px solid var(--border);background:transparent;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.day-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.day-tab.lab-day{border-color:rgba(239,159,39,0.4);color:var(--amber)}
+.day-tab.lab-day.active{background:var(--amber);color:#000;border-color:var(--amber)}
+.day-tab.today-marker{border-color:var(--border2)}
+
+.tt-row{display:flex;gap:0;margin-bottom:2px}
+.tt-time{width:64px;flex-shrink:0;font-size:11px;color:var(--text3);padding-top:12px;text-align:right;padding-right:10px;line-height:1.2}
+.tt-line{width:3px;flex-shrink:0;border-radius:4px;margin:6px 10px 0;min-height:46px}
+.tt-body{flex:1;border-radius:10px;padding:10px 12px;margin-bottom:0;min-height:46px}
+.tt-label{font-size:13px;font-weight:500;line-height:1.3}
+.tt-sub{font-size:11px;margin-top:2px;line-height:1.4;opacity:0.8}
+.tt-now .tt-body{box-shadow:0 0 0 1.5px var(--accent),0 0 0 4px rgba(29,158,117,0.12)}
+.tt-now .tt-time{color:var(--accent-light);font-weight:600}
+.now-pill{font-size:10px;font-weight:600;background:var(--accent);color:#fff;border-radius:20px;padding:2px 7px;display:inline-block;margin-bottom:3px;letter-spacing:0.04em}
+
+/* category colors */
+.c-dsa .tt-line{background:#5DCAA5}.c-dsa .tt-body{background:rgba(29,158,117,0.1)}.c-dsa .tt-label{color:#5DCAA5}.c-dsa .tt-sub{color:var(--accent2)}
+.c-study .tt-line{background:#378ADD}.c-study .tt-body{background:rgba(55,138,221,0.09)}.c-study .tt-label{color:#82b8e8}.c-study .tt-sub{color:rgba(55,138,221,0.65)}
+.c-project .tt-line{background:#7F77DD}.c-project .tt-body{background:rgba(127,119,221,0.1)}.c-project .tt-label{color:#a8a4e8}.c-project .tt-sub{color:rgba(127,119,221,0.65)}
+.c-break .tt-line{background:#3a5248}.c-break .tt-body{background:rgba(58,82,72,0.15)}.c-break .tt-label{color:var(--text2)}.c-break .tt-sub{color:var(--text3)}
+.c-meal .tt-line{background:#EF9F27}.c-meal .tt-body{background:rgba(239,159,39,0.1)}.c-meal .tt-label{color:var(--amber)}.c-meal .tt-sub{color:rgba(239,159,39,0.65)}
+.c-lab .tt-line{background:#E24B4A}.c-lab .tt-body{background:rgba(226,75,74,0.1)}.c-lab .tt-label{color:#e87878}.c-lab .tt-sub{color:rgba(226,75,74,0.65)}
+.c-dl .tt-line{background:#D85A30}.c-dl .tt-body{background:rgba(216,90,48,0.1)}.c-dl .tt-label{color:#e8855a}.c-dl .tt-sub{color:rgba(216,90,48,0.65)}
+.c-net .tt-line{background:#1D9E75}.c-net .tt-body{background:rgba(29,158,117,0.07)}.c-net .tt-label{color:var(--accent-light)}.c-net .tt-sub{color:var(--accent2)}
+.c-wind .tt-line{background:#3a4a45}.c-wind .tt-body{background:rgba(58,74,69,0.2)}.c-wind .tt-label{color:#7a9a92}.c-wind .tt-sub{color:#4a6a62}
+.c-sleep .tt-line{background:#243028}.c-sleep .tt-body{background:rgba(36,48,40,0.4)}.c-sleep .tt-label{color:#4a6a62}.c-sleep .tt-sub{color:#3a5048}
+.c-wake .tt-line{background:#5DCAA5}.c-wake .tt-body{background:rgba(93,202,165,0.07)}.c-wake .tt-label{color:var(--accent-light)}.c-wake .tt-sub{color:var(--accent2)}
+.c-revision .tt-line{background:#7F77DD}.c-revision .tt-body{background:rgba(127,119,221,0.08)}.c-revision .tt-label{color:#a8a4e8}.c-revision .tt-sub{color:rgba(127,119,221,0.6)}
+
+.lab-banner{background:rgba(226,75,74,0.1);border:0.5px solid rgba(226,75,74,0.3);border-radius:10px;padding:9px 12px;margin-bottom:12px;font-size:12px;color:#e87878;display:flex;align-items:center;gap:7px}
+.free-banner{background:rgba(29,158,117,0.08);border:0.5px solid var(--border2);border-radius:10px;padding:9px 12px;margin-bottom:12px;font-size:12px;color:var(--accent-light);display:flex;align-items:center;gap:7px}
+
+/* PROGRESS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-box{background:var(--card);border:0.5px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.stat-val{font-size:26px;font-weight:700;color:var(--accent-light)}
+.stat-lbl{font-size:11px;color:var(--text3);margin-top:2px}
+.phase-card{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
+.phase-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.phase-name{font-size:14px;font-weight:600;color:var(--text)}
+.phase-mo{font-size:11px;color:var(--text3);margin-top:2px}
+.pbadge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;flex-shrink:0}
+.pb-cur{background:rgba(29,158,117,0.2);color:var(--accent-light)}
+.pb-up{background:rgba(255,255,255,0.05);color:var(--text3)}
+.pill-row{display:flex;flex-wrap:wrap;gap:5px}
+.pill{font-size:11px;padding:3px 8px;border-radius:20px;background:rgba(255,255,255,0.05);color:var(--text3);border:0.5px solid var(--border)}
+.company-grp{margin-bottom:12px}
+.company-grp:last-child{margin-bottom:0}
+.co-lbl{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
+.co-pills{display:flex;flex-wrap:wrap;gap:5px}
+.co-pill{font-size:12px;padding:4px 10px;border-radius:20px;background:var(--bg3);border:0.5px solid var(--border);color:var(--text2)}
+
+/* PROJECTS */
+.proj-card{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
+.proj-star{float:right;font-size:11px;font-weight:600;background:rgba(29,158,117,0.2);color:var(--accent-light);padding:3px 9px;border-radius:20px;margin-left:6px}
+.proj-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px}
+.proj-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.ptag{font-size:11px;padding:3px 8px;border-radius:20px}
+.pt-llm{background:var(--purple-bg);color:var(--purple)}
+.pt-ml{background:var(--red-bg);color:var(--red)}
+.pt-dl{background:var(--blue-bg);color:var(--blue)}
+.pt-tr{background:rgba(29,158,117,0.15);color:var(--accent-light)}
+.proj-desc{font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:10px}
+.proj-stack{font-size:12px;color:var(--text3);border-top:0.5px solid var(--border);padding-top:10px}
+.proj-stack strong{color:var(--text2)}
+
+/* PLAN */
+.lang-card{background:rgba(29,158,117,0.08);border:0.5px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:12px}
+.lang-title{font-size:14px;font-weight:600;color:var(--accent-light);margin-bottom:4px}
+.lang-txt{font-size:13px;color:var(--text2);line-height:1.5}
+.week-row{padding:11px 0;border-bottom:0.5px solid var(--border)}
+.week-row:last-child{border-bottom:none;padding-bottom:0}
+.week-num{font-size:11px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px}
+.week-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.week-detail{font-size:12px;color:var(--text3);line-height:1.4}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="header">
+    <div id="header-top">
+      <div id="app-title">Placement Prep</div>
+      <div id="streak-badge">
+        <span style="font-size:14px">🔥</span>
+        <span id="streak-num">0</span>
+        <span style="font-size:12px;color:var(--amber);font-weight:500">day streak</span>
+      </div>
+    </div>
+    <div id="header-sub">Target: <strong style="color:var(--accent-light)">40 LPA</strong> · Jadavpur · Labs: Mon Tue Thu</div>
+  </div>
+
+  <div id="content">
+
+    <!-- TODAY -->
+    <div class="page active" id="page-today">
+      <div class="day-banner">
+        <div class="day-date" id="today-date"></div>
+        <div class="day-title" id="today-greet">Good morning 👋</div>
+        <div class="prog-wrap"><div class="prog-fill" id="prog-bar" style="width:0%"></div></div>
+        <div class="prog-label"><span id="done-lbl">0 of 8</span> tasks done today</div>
+      </div>
+      <div class="tip-card"><div class="tip-txt" id="daily-tip"></div></div>
+      <div class="card">
+        <div class="card-title">Today's Tasks</div>
+        <div id="task-list"></div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="page" id="page-schedule">
+      <div class="day-tabs" id="day-tabs"></div>
+      <div id="day-banner-tt"></div>
+      <div id="tt-list"></div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="page" id="page-progress">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-val" id="total-val">0</div><div class="stat-lbl">Total tasks done</div></div>
+        <div class="stat-box"><div class="stat-val" id="streak-val">0</div><div class="stat-lbl">Day streak</div></div>
+      </div>
+      <div class="sec-head">6-month roadmap</div>
+      <div class="phase-card"><div class="phase-hdr"><div><div class="phase-name">Foundation rebuild</div><div class="phase-mo">Months 1–2 · Now</div></div><span class="pbadge pb-cur">Current</span></div><div class="pill-row"><span class="pill">Python from scratch</span><span class="pill">LeetCode Easy × 2/day</span><span class="pill">NumPy + Pandas</span><span class="pill">Git basics</span></div></div>
+      <div class="phase-card"><div class="phase-hdr"><div><div class="phase-name">DSA + ML implementation</div><div class="phase-mo">Month 3</div></div><span class="pbadge pb-up">Upcoming</span></div><div class="pill-row"><span class="pill">Trees & graphs</span><span class="pill">Regression from scratch</span><span class="pill">Neural net in NumPy</span></div></div>
+      <div class="phase-card"><div class="phase-hdr"><div><div class="phase-name">Major project</div><div class="phase-mo">Month 4</div></div><span class="pbadge pb-up">Upcoming</span></div><div class="pill-row"><span class="pill">Build + deploy</span><span class="pill">GitHub README</span><span class="pill">HuggingFace / Streamlit</span></div></div>
+      <div class="phase-card"><div class="phase-hdr"><div><div class="phase-name">Interview prep</div><div class="phase-mo">Month 5</div></div><span class="pbadge pb-up">Upcoming</span></div><div class="pill-row"><span class="pill">ML system design</span><span class="pill">Deep learning theory</span><span class="pill">Mock interviews × 3/week</span></div></div>
+      <div class="phase-card"><div class="phase-hdr"><div><div class="phase-name">Apply aggressively</div><div class="phase-mo">Month 6</div></div><span class="pbadge pb-up">Upcoming</span></div><div class="pill-row"><span class="pill">30+ applications</span><span class="pill">LinkedIn overhaul</span><span class="pill">Referrals via JU alumni</span></div></div>
+      <div class="sec-head">Target companies</div>
+      <div class="card">
+        <div class="company-grp"><div class="co-lbl">India startups</div><div class="co-pills"><span class="co-pill">Flipkart</span><span class="co-pill">Meesho</span><span class="co-pill">PhonePe</span><span class="co-pill">Razorpay</span><span class="co-pill">Zepto</span><span class="co-pill">CRED</span></div></div>
+        <div class="company-grp"><div class="co-lbl">MNCs</div><div class="co-pills"><span class="co-pill">Amazon</span><span class="co-pill">Microsoft</span><span class="co-pill">Google</span><span class="co-pill">Adobe</span><span class="co-pill">SAP Labs</span></div></div>
+        <div class="company-grp"><div class="co-lbl">Abroad (open to relocate)</div><div class="co-pills"><span class="co-pill">Booking.com 🇳🇱</span><span class="co-pill">Zalando 🇩🇪</span><span class="co-pill">Adyen 🇳🇱</span><span class="co-pill">Canva 🇦🇺</span></div></div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="page" id="page-projects">
+      <div class="proj-card">
+        <span class="proj-star">⭐ Recommended</span>
+        <div class="proj-title">RAG-based AI Assistant</div>
+        <div class="proj-tags"><span class="ptag pt-llm">LLM</span><span class="ptag pt-tr">Trending</span></div>
+        <div class="proj-desc">Chatbot that answers over documents (medical, legal, academic). LangChain + FAISS + GPT/Gemini API + RAGAS evaluation. Deploy on Streamlit or HuggingFace.</div>
+        <div class="proj-stack"><strong>Stack:</strong> Python · LangChain · FAISS · OpenAI API · Streamlit · Docker</div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-title">Real-time Fraud Detection Pipeline</div>
+        <div class="proj-tags"><span class="ptag pt-ml">MLOps</span><span class="ptag pt-tr">Industry relevant</span></div>
+        <div class="proj-desc">End-to-end ML pipeline: Kafka streaming, XGBoost + neural net ensemble, drift detection, FastAPI endpoint. Valued at Razorpay, PayTM, CRED.</div>
+        <div class="proj-stack"><strong>Stack:</strong> Python · Kafka · XGBoost · FastAPI · MLflow · Docker · AWS</div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-title">Multi-modal AI (Image + Text)</div>
+        <div class="proj-tags"><span class="ptag pt-dl">Deep learning</span><span class="ptag pt-llm">Research-grade</span></div>
+        <div class="proj-desc">Image + question → detailed answer using CLIP. Fine-tune on medical X-ray QA or product image analysis. Great for MNCs and research roles.</div>
+        <div class="proj-stack"><strong>Stack:</strong> Python · PyTorch · CLIP · HuggingFace Transformers · Gradio</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Upgrade your mini project</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.55">Add proper evaluation metrics, a baseline comparison, a clean README, and a results table. Makes it interview-ready even if it's simple.</div>
+      </div>
+    </div>
+
+    <!-- PLAN -->
+    <div class="page" id="page-plan">
+      <div class="lang-card">
+        <div class="lang-title">Language decision: Python only ✓</div>
+        <div class="lang-txt">Your target is 40 LPA in DS/AI. Every company in that space uses Python. Do NOT split attention with C++. One language mastered beats two languages half-known.</div>
+      </div>
+      <div class="sec-head">8-week Python rebuild</div>
+      <div class="card">
+        <div class="week-row"><div class="week-num">Week 1</div><div class="week-title">Variables, loops, functions</div><div class="week-detail">Write 3 programs daily from scratch — no AI, no copy-paste. FizzBuzz, reverse a string, count vowels.</div></div>
+        <div class="week-row"><div class="week-num">Week 2</div><div class="week-title">Lists, dicts, sets</div><div class="week-detail">Solve 7 LeetCode Easy on arrays. Write without looking at solutions first.</div></div>
+        <div class="week-row"><div class="week-num">Week 3</div><div class="week-title">OOP — classes & objects</div><div class="week-detail">Build a Student grade tracker using classes. Design it yourself, no tutorial.</div></div>
+        <div class="week-row"><div class="week-num">Week 4</div><div class="week-title">File I/O, exceptions, modules</div><div class="week-detail">Build a CSV reader and data cleaner in pure Python. No pandas yet.</div></div>
+        <div class="week-row"><div class="week-num">Week 5</div><div class="week-title">NumPy & Pandas hands-on</div><div class="week-detail">Matrix multiplication manually then in NumPy. Load a Kaggle dataset and explore fully.</div></div>
+        <div class="week-row"><div class="week-num">Week 6</div><div class="week-title">Recursion & basic DSA</div><div class="week-detail">Implement binary search, merge sort, stack. Draw on paper first, then code.</div></div>
+        <div class="week-row"><div class="week-num">Week 7</div><div class="week-title">Trees & graphs</div><div class="week-detail">Implement BFS and DFS from scratch. Solve 5 LeetCode tree problems.</div></div>
+        <div class="week-row"><div class="week-num">Week 8</div><div class="week-title">Neural net in NumPy</div><div class="week-detail">2-layer neural network: forward pass, backprop, gradient descent — NumPy only. This cements everything.</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="bottom-nav">
+    <button class="nav-btn active" onclick="goPage('today',this)"><span class="nav-icon">✓</span><span class="nav-label">Today</span></button>
+    <button class="nav-btn" onclick="goPage('schedule',this)"><span class="nav-icon">◷</span><span class="nav-label">Schedule</span></button>
+    <button class="nav-btn" onclick="goPage('progress',this)"><span class="nav-icon">◎</span><span class="nav-label">Progress</span></button>
+    <button class="nav-btn" onclick="goPage('projects',this)"><span class="nav-icon">◈</span><span class="nav-label">Projects</span></button>
+    <button class="nav-btn" onclick="goPage('plan',this)"><span class="nav-icon">≡</span><span class="nav-label">Plan</span></button>
+  </div>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
+const LAB_DAYS = [1, 2, 4]; // Mon=1, Tue=2, Thu=4
+
+const TASKS_LAB = [
+  {id:'dsa1',    title:'DSA problem 1 (LeetCode)',      sub:'Write fully by hand before checking hints',        time:'8:00–9:00 AM'},
+  {id:'dsa2',    title:'DSA problem 2 — revisit',       sub:'Rewrite yesterday\'s solution faster',             time:'9:00–9:30 AM'},
+  {id:'concept', title:'Study + implement 1 concept',   sub:'Code it from scratch — not just understand it',   time:'9:30–11:30 AM'},
+  {id:'lab',     title:'Attend LAB session',            sub:'Stay focused — apply Python/ML thinking there too',time:'2:00–6:00 PM'},
+  {id:'project', title:'Project work (post-lab)',       sub:'Even 1 function after lab counts as progress',     time:'7:30–9:30 PM'},
+  {id:'revision',title:'DSA revision & rewrite',        sub:'Redo problems you found hard. Muscle memory.',     time:'9:30–10:30 PM'},
+  {id:'mlnotes', title:'ML/NLP theory notes',           sub:'Light study — read, annotate, don\'t code heavy', time:'11:00 PM–12:00 AM'},
+  {id:'reflect', title:'Write 3 lines: what I did today',sub:'What I coded · What I learned · Tomorrow\'s goal',time:'12:00 AM'},
+];
+
+const TASKS_FREE = [
+  {id:'dsa1',    title:'DSA problem 1 (LeetCode)',      sub:'Write fully by hand — 30 min before any hints',   time:'8:00–9:00 AM'},
+  {id:'dsa2',    title:'DSA problem 2',                 sub:'Medium difficulty. If stuck, write the brute force first', time:'9:00–10:00 AM'},
+  {id:'concept', title:'Study + implement 1 concept',   sub:'Code it from scratch. Make it run.',               time:'10:30 AM–12:00 PM'},
+  {id:'project', title:'Major project — deep work',     sub:'2+ hours uninterrupted. This is your highlight reel', time:'2:00–4:30 PM'},
+  {id:'dl',      title:'Deep learning implementation',  sub:'Backprop, loss function, or 1 layer in NumPy',    time:'5:00–6:30 PM'},
+  {id:'revision',title:'DSA revision & rewrite',        sub:'Redo problems you found hard this week',           time:'8:00–9:00 PM'},
+  {id:'mlnotes', title:'ML/NLP theory notes',           sub:'Light study — papers, concepts, flashcards',      time:'10:00–11:30 PM'},
+  {id:'reflect', title:'Write 3 lines: what I did today',sub:'What I coded · What I learned · Tomorrow\'s goal',time:'12:00 AM'},
+];
+
+const TASKS_SUN = [
+  {id:'revplan', title:'Weekly review & planning',      sub:'What went well? What to fix? Set next week targets', time:'9:00–10:00 AM'},
+  {id:'dsa1',    title:'DSA mixed problems',            sub:'Pick from topics you struggled this week',         time:'10:30–12:00 PM'},
+  {id:'project', title:'Project milestone check',       sub:'Are you on track? Push a commit to GitHub today',  time:'2:00–4:00 PM'},
+  {id:'dl',      title:'Deep learning focus session',   sub:'Implement something you\'ve been putting off',     time:'4:30–6:00 PM'},
+  {id:'linkedin',title:'LinkedIn + networking',         sub:'Connect with 3 JU alumni at target companies',    time:'7:00–7:30 PM'},
+  {id:'revision',title:'DSA revision — full week',      sub:'Rewrite all tough problems from the week',         time:'8:00–9:30 PM'},
+  {id:'nextplan',title:'Plan next week in detail',      sub:'Write schedule, pick concepts, set project goal',  time:'10:00–11:00 PM'},
+  {id:'reflect', title:'Weekly reflection — 5 lines',   sub:'Progress this week · Gap · Goal for next week',   time:'11:30 PM'},
+];
+
+// ─── TIMETABLES ──────────────────────────────────────────────────────────────
+
+const TT_LAB = [
+  {t:'7:30 AM', l:'Wake up & freshen up',         s:'No phone first 15 min. Splash water, light stretch.',       c:'wake'},
+  {t:'8:00 AM', l:'Breakfast',                    s:'Sattu + 2 Eggs + Nuts + Dates — your brain\'s fuel.',      c:'meal'},
+  {t:'8:30 AM', l:'DSA Problem 1',                s:'LeetCode — write fully by hand. 30 min before hints.',     c:'dsa'},
+  {t:'9:30 AM', l:'DSA Problem 2 + review',       s:'Rewrite yesterday\'s solution. Spot patterns.',            c:'dsa'},
+  {t:'10:00 AM',l:'Study + implement concept',    s:'Code it from scratch. Arrays → OOP → recursion flow.',     c:'study'},
+  {t:'12:00 PM',l:'Prep + travel to college',     s:'Pack your bag. Leave early. No rush.',                     c:'break'},
+  {t:'12:30 PM',l:'Lunch',                        s:'Khichdi + Ghee — eat before lab, not during.',             c:'meal'},
+  {t:'2:00 PM', l:'LAB SESSION',                  s:'College lab — 2:00 to 6:00 PM. Stay focused.',            c:'lab'},
+  {t:'6:00 PM', l:'Return home + freshen up',     s:'Decompress. Don\'t open laptop for 30 min.',               c:'break'},
+  {t:'6:30 PM', l:'Dinner',                       s:'Dal + Rice/Khichdi + 2 Boiled Eggs.',                     c:'meal'},
+  {t:'7:30 PM', l:'ML Project — deep work',       s:'Pick up exactly where you left off. No context switching.',c:'project'},
+  {t:'9:30 PM', l:'DSA revision & rewrite',       s:'Redo problems you found hard. Build the muscle.',          c:'dsa'},
+  {t:'10:30 PM',l:'Short break',                  s:'Tea, stretch, rest eyes. 20 min max.',                     c:'break'},
+  {t:'11:00 PM',l:'ML/NLP theory notes',          s:'Light study — read papers, annotate, no heavy coding.',    c:'study'},
+  {t:'12:00 AM',l:'Daily reflection + wind down', s:'3 lines: coded · learned · tomorrow. Then dim lights.',    c:'wind'},
+  {t:'12:30 AM',l:'Sleep',                        s:'8 hrs consolidates everything you learned today.',          c:'sleep'},
+];
+
+const TT_FREE = [
+  {t:'7:30 AM', l:'Wake up & freshen up',         s:'No phone first 15 min. Today is a full deep-work day.',   c:'wake'},
+  {t:'8:00 AM', l:'Breakfast',                    s:'Sattu + 2 Eggs + Nuts + Dates.',                          c:'meal'},
+  {t:'8:30 AM', l:'DSA Problem 1',                s:'LeetCode — write fully by hand. No shortcuts.',           c:'dsa'},
+  {t:'9:30 AM', l:'DSA Problem 2',                s:'Try Medium difficulty. Brute force first, then optimize.', c:'dsa'},
+  {t:'10:30 AM',l:'Study + implement concept',    s:'Code it from scratch until it runs. No copy-paste.',      c:'study'},
+  {t:'12:30 PM',l:'Lunch + rest',                 s:'Khichdi + Ghee. Take a short nap if needed. Full reset.', c:'meal'},
+  {t:'2:00 PM', l:'Major project — deep work',    s:'2.5 hrs uninterrupted. This block builds your resume.',    c:'project'},
+  {t:'4:30 PM', l:'Break — go outside',           s:'Walk, breathe, no screen. Brain needs oxygen.',           c:'break'},
+  {t:'5:00 PM', l:'Deep learning implementation', s:'Forward pass, backprop, or 1 layer — NumPy or PyTorch.',  c:'dl'},
+  {t:'6:30 PM', l:'Dinner',                       s:'Dal + Rice/Khichdi + 2 Boiled Eggs.',                     c:'meal'},
+  {t:'7:30 PM', l:'Project continuation',         s:'Pick up from 4:30. Push a working feature to GitHub.',    c:'project'},
+  {t:'9:00 PM', l:'LinkedIn + ML paper',          s:'Connect with 1 JU alumnus. Read 1 ArXiv abstract.',       c:'net'},
+  {t:'9:30 PM', l:'Free / hobby time',            s:'You earned it. Watch something, call someone, relax.',     c:'break'},
+  {t:'10:00 PM',l:'DSA revision & rewrite',       s:'Redo hard problems. Rewiring the brain takes repetition.',c:'dsa'},
+  {t:'11:30 PM',l:'ML/NLP theory notes',          s:'Light study — concepts, flashcards, short videos.',       c:'study'},
+  {t:'12:30 AM',l:'Sleep',                        s:'No negotiation. Sleep is when your brain files everything.',c:'sleep'},
+];
+
+const TT_SUN = [
+  {t:'7:30 AM', l:'Wake up & freshen up',         s:'Sunday — lighter pace, but don\'t break the chain.',      c:'wake'},
+  {t:'8:00 AM', l:'Breakfast',                    s:'Sattu + 2 Eggs + Nuts + Dates.',                          c:'meal'},
+  {t:'9:00 AM', l:'Weekly review & planning',     s:'What went well? What broke? Set targets for next week.',  c:'revision'},
+  {t:'10:30 AM',l:'DSA mixed problems',           s:'Pick topics you struggled with this week. Revisit them.', c:'dsa'},
+  {t:'12:00 PM',l:'Lunch + rest',                 s:'Khichdi + Ghee. Rest fully.',                             c:'meal'},
+  {t:'2:00 PM', l:'Project milestone check',      s:'Are you on track? Push a commit to GitHub today.',        c:'project'},
+  {t:'4:00 PM', l:'Light workout / strolling',    s:'Walk outside 30–45 min. Weekly physical reset.',          c:'break'},
+  {t:'4:45 PM', l:'Deep learning focus',          s:'Implement something you\'ve been avoiding all week.',     c:'dl'},
+  {t:'6:00 PM', l:'Dinner',                       s:'Dal + Rice/Khichdi + 2 Boiled Eggs.',                     c:'meal'},
+  {t:'7:00 PM', l:'LinkedIn + networking',        s:'Connect with 3 JU alumni. Comment on 2 DS/AI posts.',     c:'net'},
+  {t:'8:00 PM', l:'DSA — full week revision',     s:'Rewrite all tough problems from this week. Every one.',   c:'dsa'},
+  {t:'9:30 PM', l:'Plan next week in detail',     s:'Write tomorrow\'s schedule. Pick concept + project goal.',c:'revision'},
+  {t:'11:00 PM',l:'Weekly reflection',            s:'5 lines: progress · gaps · what to fix · next week goal.',c:'wind'},
+  {t:'12:30 AM',l:'Sleep',                        s:'End the week clean. Tomorrow starts fresh.',               c:'sleep'},
+];
+
+const TIPS = [
+  "💡 You don't have a knowledge problem — you have a muscle problem. Write code by hand today.",
+  "🎯 One LeetCode problem solved from scratch is worth 10 tutorials watched.",
+  "🔥 The gap between knowing and coding closes only by coding. Open your editor now.",
+  "⚡ Your 8.97 CGPA shows you can learn anything. Now prove you can build.",
+  "🌍 You have a passport. Booking.com and Zalando sponsor visas. That's your advantage.",
+  "📌 Pick ONE project. Go deep. 40 LPA interviewers want depth, not breadth.",
+  "💪 Implement backprop in NumPy today. Understanding by coding is permanent.",
+  "🚀 Every day you code, you close the gap. Every day you don't, it widens.",
+  "🏆 Batch topper at B.Tech. That's not luck — that's proof you can do this.",
+  "📊 Lab days are not rest days. Morning block + evening block = full day done.",
+];
+
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DAY_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+// ─── STORAGE ─────────────────────────────────────────────────────────────────
+
+const K = {tasks:'pp3_tasks', date:'pp3_date', streak:'pp3_streak', last:'pp3_last', total:'pp3_total'};
+
+function todayStr() { return new Date().toDateString(); }
+
+function loadState() {
+  const saved = localStorage.getItem(K.date);
+  if (saved !== todayStr()) {
+    const last = localStorage.getItem(K.last);
+    const yday = new Date(); yday.setDate(yday.getDate() - 1);
+    if (last !== yday.toDateString()) localStorage.setItem(K.streak, '0');
+    localStorage.setItem(K.date, todayStr());
+    localStorage.setItem(K.tasks, JSON.stringify({}));
+  }
+  return {
+    tasks: JSON.parse(localStorage.getItem(K.tasks) || '{}'),
+    streak: parseInt(localStorage.getItem(K.streak) || '0'),
+    total: parseInt(localStorage.getItem(K.total) || '0'),
+  };
+}
+
+function save() {
+  localStorage.setItem(K.tasks, JSON.stringify(state.tasks));
+  localStorage.setItem(K.streak, String(state.streak));
+  localStorage.setItem(K.total, String(state.total));
+}
+
+let state = loadState();
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+
+function getDayType(dow) {
+  // dow: 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
+  if (dow === 0) return 'sunday';
+  if (LAB_DAYS.includes(dow)) return 'lab';
+  return 'free';
+}
+
+function getTasks(dow) {
+  const t = getDayType(dow);
+  if (t === 'sunday') return TASKS_SUN;
+  if (t === 'lab') return TASKS_LAB;
+  return TASKS_FREE;
+}
+
+function getTT(dow) {
+  const t = getDayType(dow);
+  if (t === 'sunday') return TT_SUN;
+  if (t === 'lab') return TT_LAB;
+  return TT_FREE;
+}
+
+function parseMinutes(str) {
+  const m = str.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if (!m) return 0;
+  let h = parseInt(m[1]), mn = parseInt(m[2]), ap = m[3].toUpperCase();
+  if (ap === 'PM' && h !== 12) h += 12;
+  if (ap === 'AM' && h === 12) h = 0;
+  return h * 60 + mn;
+}
+
+function getCurrentBlock(tt) {
+  const now = new Date();
+  const cur = now.getHours() * 60 + now.getMinutes();
+  for (let i = 0; i < tt.length - 1; i++) {
+    let s = parseMinutes(tt[i].t);
+    let e = parseMinutes(tt[i + 1].t);
+    // handle midnight crossing
+    if (s > e) { if (cur >= s || cur < e) return i; }
+    else { if (cur >= s && cur < e) return i; }
+  }
+  return tt.length - 1;
+}
+
+// ─── RENDER TODAY ─────────────────────────────────────────────────────────────
+
+function renderToday() {
+  const now = new Date();
+  const dow = now.getDay();
+  const h = now.getHours();
+  const greet = h < 12 ? 'Good morning 👋' : h < 17 ? 'Good afternoon 💪' : 'Good evening 🌙';
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dtype = getDayType(dow);
+  const dayTag = dtype === 'lab' ? ' · 🔴 Lab day' : dtype === 'sunday' ? ' · 📋 Review day' : ' · 🟢 Free day';
+
+  document.getElementById('today-date').textContent = `${DAY_NAMES[dow]}, ${now.getDate()} ${months[now.getMonth()]}${dayTag}`;
+  document.getElementById('today-greet').textContent = greet;
+  document.getElementById('daily-tip').textContent = TIPS[now.getDate() % TIPS.length];
+  document.getElementById('streak-num').textContent = state.streak;
+  document.getElementById('streak-val').textContent = state.streak;
+  document.getElementById('total-val').textContent = state.total;
+
+  const tasks = getTasks(dow);
+  const list = document.getElementById('task-list');
+  list.innerHTML = '';
+  let done = 0;
+  tasks.forEach(t => {
+    const isDone = !!state.tasks[t.id];
+    if (isDone) done++;
+    const el = document.createElement('div');
+    el.className = 'task-item';
+    el.innerHTML = `
+      <div class="task-cb ${isDone ? 'done' : ''}"></div>
+      <div class="task-body">
+        <div class="task-name ${isDone ? 'done' : ''}">${t.title}</div>
+        <div class="task-sub">${t.sub}</div>
+        <div class="task-time">${t.time}</div>
+      </div>`;
+    el.addEventListener('click', () => {
+      const was = !!state.tasks[t.id];
+      if (!was) { state.tasks[t.id] = true; state.total++; }
+      else { delete state.tasks[t.id]; state.total = Math.max(0, state.total - 1); }
+      save();
+      renderToday();
+    });
+    list.appendChild(el);
+  });
+
+  const pct = Math.round((done / tasks.length) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('done-lbl').textContent = `${done} of ${tasks.length}`;
+
+  if (done === tasks.length) {
+    const last = localStorage.getItem(K.last);
+    if (last !== todayStr()) {
+      state.streak++;
+      localStorage.setItem(K.last, todayStr());
+      save();
+      document.getElementById('streak-num').textContent = state.streak;
+    }
+  }
+}
+
+// ─── RENDER SCHEDULE ──────────────────────────────────────────────────────────
+
+let activeTTDay = new Date().getDay();
+
+function renderSchedule() {
+  const todayDow = new Date().getDay();
+  // render tabs
+  const tabs = document.getElementById('day-tabs');
+  tabs.innerHTML = '';
+  for (let i = 0; i < 7; i++) {
+    const dow = (todayDow + i) % 7; // start from today
+    const isLab = LAB_DAYS.includes(dow);
+    const isSun = dow === 0;
+    const isToday = dow === todayDow;
+    const isActive = dow === activeTTDay;
+    const btn = document.createElement('button');
+    btn.className = `day-tab${isLab ? ' lab-day' : ''}${isToday ? ' today-marker' : ''}${isActive ? ' active' : ''}`;
+    btn.textContent = DAY_SHORT[dow] + (isToday ? ' (Today)' : '');
+    btn.onclick = () => { activeTTDay = dow; renderSchedule(); };
+    tabs.appendChild(btn);
+  }
+
+  const dow = activeTTDay;
+  const dtype = getDayType(dow);
+  const banner = document.getElementById('day-banner-tt');
+  if (dtype === 'lab') {
+    banner.innerHTML = `<div class="lab-banner">🔴 <span><strong>Lab day</strong> — 2:00–6:00 PM at college. Morning + evening blocks are your study time.</span></div>`;
+  } else if (dtype === 'sunday') {
+    banner.innerHTML = `<div class="free-banner">📋 <span><strong>Sunday</strong> — Weekly review, revision, and planning for next week.</span></div>`;
+  } else {
+    banner.innerHTML = `<div class="free-banner">🟢 <span><strong>Free day</strong> — No lab. Full deep-work blocks. Make it count.</span></div>`;
+  }
+
+  const tt = getTT(dow);
+  const isToday = dow === todayDow;
+  const curBlock = isToday ? getCurrentBlock(tt) : -1;
+  const list = document.getElementById('tt-list');
+  list.innerHTML = '';
+
+  tt.forEach((block, i) => {
+    const isNow = i === curBlock;
+    const el = document.createElement('div');
+    el.className = `tt-row c-${block.c}${isNow ? ' tt-now' : ''}`;
+    el.innerHTML = `
+      <div class="tt-time">${block.t}</div>
+      <div class="tt-line"></div>
+      <div class="tt-body">
+        ${isNow ? '<div class="now-pill">NOW</div>' : ''}
+        <div class="tt-label">${block.l}</div>
+        <div class="tt-sub">${block.s}</div>
+      </div>`;
+    list.appendChild(el);
+    if (isNow) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+  });
+}
+
+// ─── NAV ─────────────────────────────────────────────────────────────────────
+
+function goPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('content').scrollTo(0, 0);
+  if (name === 'schedule') renderSchedule();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderToday();
+</script>
+</body>
+</html>
